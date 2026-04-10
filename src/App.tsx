@@ -49,10 +49,16 @@ const App: React.FC = () => {
   return (
     <div className="app-container">
       <header className="header">
+        <div className="cp-branding">
+          <a href="https://www.cloudpedagogy.com/" className="cp-link" target="_blank" rel="noopener noreferrer">
+            CloudPedagogy
+          </a>
+        </div>
+        
         <div className="header-top">
           <h1>Curriculum Alignment & Mapping Engine</h1>
           <button className="btn btn-outline btn-sm" onClick={() => setIsMethodologyOpen(true)}>
-            <span>📖</span> How this works
+            📖 How this works
           </button>
         </div>
         
@@ -70,15 +76,15 @@ const App: React.FC = () => {
 
         <div className="controls">
           <button className="btn btn-primary" onClick={loadDemo}>
-            <span>🚀</span> Load Demo Data
+            🚀 Load Demo Data
           </button>
 
-          <button className="btn btn-accent" onClick={() => setIsEditorOpen(true)}>
-            <span>🏗️</span> Structure Explorer
+          <button className="btn btn-outline" onClick={() => setIsEditorOpen(true)}>
+            🏗️ Structure Explorer
           </button>
           
           <button className="btn btn-outline" onClick={handleImportClick}>
-            <span>📥</span> Import JSON
+            📥 Import JSON
           </button>
           <input 
             type="file" 
@@ -93,11 +99,11 @@ const App: React.FC = () => {
             onClick={exportData}
             disabled={!dataset}
           >
-            <span>📤</span> Export JSON
+            📤 Export JSON
           </button>
 
           <button className="btn btn-danger" onClick={resetData}>
-            <span>🧹</span> Reset Data
+            🧹 Reset Data
           </button>
         </div>
 
@@ -114,7 +120,7 @@ const App: React.FC = () => {
               <span className="value">{metrics.connectedComponents}</span>
             </div>
             {metrics.orphanedEntities > 0 && (
-              <div className="metric-tag warning">
+              <div className="metric-tag">
                 <span className="label">Isolated Entities:</span>
                 <span className="value">{metrics.orphanedEntities}</span>
                 <span>⚠️</span>
@@ -137,24 +143,21 @@ const App: React.FC = () => {
                 label="Outcomes" 
                 count={dataset.outcomes.length} 
                 icon="🎯" 
-                color="#ec4899"
               />
               <SummaryCard 
                 label="Assessments" 
                 count={dataset.assessments.length} 
                 icon="📝" 
-                color="#10b981"
               />
               <SummaryCard 
                 label="Skills" 
                 count={dataset.skills.length} 
                 icon="🛠️" 
-                color="#f59e0b"
               />
             </div>
 
             <section className="mt-4">
-              <h2 className="mb-4 text-center">Curriculum Alignment Map</h2>
+              <h2 className="mb-4">Curriculum Alignment Map</h2>
               <CurriculumGraph dataset={dataset} />
             </section>
 
@@ -204,6 +207,12 @@ const App: React.FC = () => {
           </>
         )}
       </main>
+
+      <footer className="footer">
+        <p className="footer-text">
+          CloudPedagogy · Governance-ready AI and curriculum systems
+        </p>
+      </footer>
     </div>
   );
 };

@@ -29,8 +29,8 @@ const ValidationStatus: React.FC<ValidationStatusProps> = ({ issues }) => {
         <div className="issue-details-panel">
           <div className="issue-list">
             {issues.map((issue, idx) => (
-              <div key={idx} className={`issue-item ${issue.level}`}>
-                <div className="issue-type-badge">{issue.level}</div>
+              <div key={idx} className="issue-item">
+                <div className="issue-type-badge">{issue.level.toUpperCase()}</div>
                 <div className="issue-message">
                   {issue.message}
                   {issue.entityId && <span className="entity-id">ID: {issue.entityId}</span>}

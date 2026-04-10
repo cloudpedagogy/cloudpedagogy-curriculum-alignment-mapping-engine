@@ -42,7 +42,7 @@ const MethodologyPanel: React.FC<MethodologyPanelProps> = ({ onClose }) => {
           </MethodologySection>
 
           <MethodologySection title="2. What This Tool Does NOT Do">
-            <div className="tag tag-danger mb-3">Notice: Non-Prescriptive System</div>
+            <div className="outcome-tag mb-3">Notice: Non-Prescriptive System</div>
             <ul className="list-disc pl-5">
               <li>**No Workload Simulation**: It does not model time or student/staff workload dynamics.</li>
               <li>**No Performance Scoring**: It does not assign weighted grades or evaluate content quality.</li>
@@ -70,9 +70,11 @@ const MethodologyPanel: React.FC<MethodologyPanelProps> = ({ onClose }) => {
           </MethodologySection>
 
           <MethodologySection title="5. Interpretation Guidance">
-            <div className="guidance-box p-4 bg-tertiary rounded-lg border-l-4 border-accent-secondary">
-              <p className="font-bold text-accent-secondary mb-1">Important: Descriptive, Not Evaluative</p>
-              <p>Validation and diagnostic signals are strictly **descriptive**. For example, "High Assessment Density" is a structural observation, not an evaluative judgement of over-assessment. All signals require academic context to interpret and resolve.</p>
+            <div className="disclaimer-banner">
+              <div>
+                <p><strong>Important: Descriptive, Not Evaluative</strong></p>
+                <p>Validation and diagnostic signals are strictly **descriptive**. For example, "High Assessment Density" is a structural observation, not an evaluative judgement of over-assessment. All signals require academic context to interpret and resolve.</p>
+              </div>
             </div>
           </MethodologySection>
         </div>

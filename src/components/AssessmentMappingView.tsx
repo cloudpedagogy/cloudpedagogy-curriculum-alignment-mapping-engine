@@ -61,7 +61,7 @@ const AssessmentMappingView: React.FC<AssessmentMappingViewProps> = ({ dataset, 
                   <h3 className="tier-title">{module.code}: {module.title}</h3>
                 </div>
                 {isDense && (
-                  <div className="tag tag-warning">
+                  <div className="outcome-tag">
                     High Assessment Density ({moduleAssessments.length})
                   </div>
                 )}

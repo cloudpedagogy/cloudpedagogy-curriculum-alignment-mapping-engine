@@ -78,7 +78,7 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
                     return (
                       <td key={`${outcome.id}-${m.id}`} className="matrix-cell">
                         {info.aligns && (
-                          <div className={`cell-indicator ${info.assesses ? 'assessed' : 'aligned'}`} title={info.assesses ? 'Aligned & Assessed' : 'Aligned'}>
+                          <div className="cell-indicator" title={info.assesses ? 'Aligned & Assessed' : 'Aligned'}>
                             {info.assesses ? '●' : '○'}
                           </div>
                         )}
@@ -87,8 +87,8 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
                   })}
                   <td className="summary-col">
                     <div className="row-signals">
-                      {isGap && <span className="tag tag-gap">Gap</span>}
-                      {isOverConcentrated && <span className="tag tag-conc">{alignCount}x</span>}
+                      {isGap && <span className="outcome-tag">Gap</span>}
+                      {isOverConcentrated && <span className="outcome-tag">{alignCount}x</span>}
                     </div>
                   </td>
                 </tr>
@@ -108,11 +108,11 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
           <span>Aligned & Assessed</span>
         </div>
         <div className="legend-item">
-          <span className="tag tag-gap">Gap</span>
+          <span className="outcome-tag">Gap</span>
           <span>Uncovered Outcome</span>
         </div>
         <div className="legend-item">
-          <span className="tag tag-conc">Nx</span>
+          <span className="outcome-tag">Nx</span>
           <span>High Concentration (Modules)</span>
         </div>
       </div>

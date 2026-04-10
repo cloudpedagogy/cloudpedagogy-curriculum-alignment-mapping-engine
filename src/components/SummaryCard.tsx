@@ -4,12 +4,11 @@ interface SummaryCardProps {
   label: string;
   count: number;
   icon?: string;
-  color?: string;
 }
 
-const SummaryCard: React.FC<SummaryCardProps> = ({ label, count, icon, color }) => {
+const SummaryCard: React.FC<SummaryCardProps> = ({ label, count, icon }) => {
   return (
-    <div className="summary-card" style={{ '--accent-color': color || '#6366f1' } as React.CSSProperties}>
+    <div className="summary-card">
       <div className="summary-card-inner">
         <div className="summary-icon">{icon || '📊'}</div>
         <div className="summary-content">

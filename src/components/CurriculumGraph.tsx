@@ -38,19 +38,19 @@ const CurriculumGraph: React.FC<CurriculumGraphProps> = ({ dataset }) => {
     <div className="graph-container">
       <div className="legend">
         <div className="legend-item">
-          <div className="legend-color" style={{ backgroundColor: '#6366f1' }}></div>
+          <div className="legend-color"></div>
           <span>Module</span>
         </div>
         <div className="legend-item">
-          <div className="legend-color" style={{ backgroundColor: '#ec4899' }}></div>
+          <div className="legend-marker">○</div>
           <span>Outcome</span>
         </div>
         <div className="legend-item">
-          <div className="legend-color" style={{ backgroundColor: '#10b981' }}></div>
+          <div className="legend-marker">□</div>
           <span>Assessment</span>
         </div>
         <div className="legend-item">
-          <div className="legend-color" style={{ backgroundColor: '#f59e0b' }}></div>
+          <div className="legend-marker">◇</div>
           <span>Skill</span>
         </div>
       </div>

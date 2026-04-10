@@ -23,26 +23,15 @@ const CurriculumNode: React.FC<CurriculumNodeProps> = ({
   isDimmed,
   onClick
 }) => {
-  const typeColors: Record<EntityType, string> = {
-    module: '#6366f1',
-    outcome: '#ec4899',
-    assessment: '#10b981',
-    skill: '#f59e0b'
-  };
-
   return (
     <div
       className={`graph-node node-${type} ${isSelected ? 'selected' : ''} ${isDimmed ? 'dimmed' : ''}`}
       style={{
         left: x,
-        top: y,
-        borderColor: typeColors[type]
+        top: y
       }}
       onClick={onClick}
     >
-      <div className="node-badge" style={{ backgroundColor: typeColors[type] }}>
-        {type.charAt(0).toUpperCase()}
-      </div>
       <div className="node-content">
         <div className="node-label">{label}</div>
         {subtitle && <div className="node-subtitle">{subtitle}</div>}

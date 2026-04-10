@@ -79,6 +79,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
         <input 
           type="text" 
           value={modCode} 
+          className="form-control"
           onChange={e => setModCode(e.target.value)} 
           placeholder="e.g. CS101"
           required
@@ -89,6 +90,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
         <input 
           type="text" 
           value={modTitle} 
+          className="form-control"
           onChange={e => setModTitle(e.target.value)} 
           placeholder="e.g. Intro to Data"
           required
@@ -96,14 +98,14 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
       </div>
       <div className="form-group">
         <label>Level</label>
-        <select value={modLevel} onChange={e => setModLevel(e.target.value)}>
+        <select className="form-control" value={modLevel} onChange={e => setModLevel(e.target.value)}>
           <option value="4">Level 4</option>
           <option value="5">Level 5</option>
           <option value="6">Level 6</option>
           <option value="7">Level 7</option>
         </select>
       </div>
-      <button type="submit" className="btn btn-primary mt-4 w-full">Add Module</button>
+      <button type="submit" className="btn btn-primary mt-4 w-full" style={{ width: '100%' }}>Add Module</button>
     </form>
   );
 
@@ -123,7 +125,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
       <form onSubmit={handleAddRelationship} className="editor-form">
         <div className="form-group">
           <label>Source (e.g. Module or Assessment)</label>
-          <select value={relSource} onChange={e => setRelSource(e.target.value)} required>
+          <select className="form-control" value={relSource} onChange={e => setRelSource(e.target.value)} required>
             <option value="">Select source...</option>
             {allSources.map(s => (
               <option key={s.id} value={s.id}>[{s.type}] {s.label}</option>
@@ -132,7 +134,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
         </div>
         <div className="form-group">
           <label>Relationship Type</label>
-          <select value={relType} onChange={e => setRelType(e.target.value as any)}>
+          <select className="form-control" value={relType} onChange={e => setRelType(e.target.value as any)}>
             <option value="aligns">Aligns to</option>
             <option value="assesses">Assesses (Assessment → Outcome)</option>
             <option value="develops">Develops (Module → Skill)</option>
@@ -141,14 +143,14 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
         </div>
         <div className="form-group">
           <label>Target (e.g. Outcome, Skill, or Module)</label>
-          <select value={relTarget} onChange={e => setRelTarget(e.target.value)} required>
+          <select className="form-control" value={relTarget} onChange={e => setRelTarget(e.target.value)} required>
             <option value="">Select target...</option>
             {allTargets.map(t => (
               <option key={t.id} value={t.id}>[{t.type}] {t.label}</option>
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary mt-4 w-full">Add Relationship</button>
+        <button type="submit" className="btn btn-primary mt-4 w-full" style={{ width: '100%' }}>Add Relationship</button>
       </form>
     );
   };

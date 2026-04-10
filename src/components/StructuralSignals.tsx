@@ -25,7 +25,7 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
     ...signals.outcomeSignals.unmapped.map(id => {
       const o = dataset.outcomes.find(x => x.id === id);
       return (
-        <div key={`unmapped-${id}`} className="signal-item warning">
+        <div key={`unmapped-${id}`} className="signal-item">
           <span className="signal-badge">Unmapped</span>
           <span className="signal-text">Outcome <strong>{o?.code}</strong> is not explicitly linked to a module.</span>
         </div>
@@ -34,7 +34,7 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
     ...signals.outcomeSignals.unassessed.map(id => {
       const o = dataset.outcomes.find(x => x.id === id);
       return (
-        <div key={`unassessed-${id}`} className="signal-item info">
+        <div key={`unassessed-${id}`} className="signal-item">
           <span className="signal-badge">Unassessed</span>
           <span className="signal-text">Outcome <strong>{o?.code}</strong> has no explicit assessment anchors.</span>
         </div>
@@ -43,7 +43,7 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
     ...signals.outcomeSignals.overConcentrated.map(item => {
       const o = dataset.outcomes.find(x => x.id === item.id);
       return (
-        <div key={`conc-${item.id}`} className="signal-item info">
+        <div key={`conc-${item.id}`} className="signal-item">
           <span className="signal-badge">High Concentration</span>
           <span className="signal-text">Outcome <strong>{o?.code}</strong> is explicitly mapped across <strong>{item.moduleCount} modules</strong>.</span>
         </div>
@@ -64,7 +64,7 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
   const assessmentItems = signals.assessmentSignals.assessmentDenseModules.map(item => {
     const m = dataset.modules.find(x => x.id === item.id);
     return (
-      <div key={`dense-${item.id}`} className="signal-item warning">
+      <div key={`dense-${item.id}`} className="signal-item">
         <span className="signal-badge">Assessment Dense</span>
         <span className="signal-text">Module <strong>{m?.code}</strong> has a high assessment concentration (<strong>{item.assessmentCount} assessments</strong> relative to <strong>{item.outcomeCount} outcomes</strong>).</span>
       </div>
