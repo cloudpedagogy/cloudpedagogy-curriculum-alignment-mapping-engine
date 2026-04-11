@@ -4,7 +4,7 @@ export interface ValidationIssue {
   level: 'error' | 'warning';
   message: string;
   entityId?: string;
-  category: 'duplicate_id' | 'broken_link' | 'missing_ref' | 'orphan';
+  category: 'duplicate_id' | 'broken_link' | 'missing_ref' | 'orphan' | 'outcome_unassessed' | 'skill_undeveloped';
 }
 
 export const validateDataset = (dataset: MappingDataset): ValidationIssue[] => {
@@ -102,6 +102,42 @@ export const validateDataset = (dataset: MappingDataset): ValidationIssue[] => {
         message: `Orphaned Outcome: ${o.code} is not linked to any module or assessment.`,
         entityId: o.id,
         category: 'orphan'
+      });
+    }
+  });
+
+  // 5. Detect Outcomes without Assessments
+  const assessedOutcomeIds = new Set(
+    relationships
+      .filter(r => r.type === 'assesses' && r.targetType === 'outcome')
+      .map(r => r.targetId)
+  );
+
+  outcomes.forEach(o => {
+    if (!assessedOutcomeIds.has(o.id)) {
+      issues.push({
+        level: 'warning',
+        message: `Unassessed Outcome: ${o.code} has no mapped assessments.`,
+        entityId: o.id,
+        category: 'outcome_unassessed'
+      });
+    }
+  });
+
+  // 6. Detect Skills without Development
+  const developedSkillIds = new Set(
+    relationships
+      .filter(r => r.type === 'develops' && r.targetType === 'skill')
+      .map(r => r.targetId)
+  );
+
+  skills.forEach(s => {
+    if (!developedSkillIds.has(s.id)) {
+      issues.push({
+        level: 'warning',
+        message: `Undeveloped Skill: ${s.name} is not explicitly developed in any module.`,
+        entityId: s.id,
+        category: 'skill_undeveloped'
       });
     }
   });

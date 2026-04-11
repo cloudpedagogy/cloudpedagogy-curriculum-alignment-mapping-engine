@@ -2,6 +2,25 @@
 
 A local-first, professional-grade tool for curriculum architecture, structural analysis, and exploratory design. The engine provides academic leadership and curriculum designers with a high-fidelity map of relational alignments between modules, learning outcomes, assessments, and skills.
 
+## 🔗 Role in the CloudPedagogy Ecosystem
+
+**Phase:** Phase 1 — Curriculum Spine
+
+**Role:**
+Defines the technical and relational foundation of the curriculum by mapping explicit alignments between structural entities.
+
+**Upstream Inputs:**
+Manual user definition or structured JSON curriculum imports.
+
+**Downstream Outputs:**
+Feeds validated structural data into the **Curriculum Simulation Tool** and the **Programme Governance Dashboard**.
+
+**Does NOT:**
+- Perform workload or student strain simulation.
+- Manage institutional risk workflows or individual decision records.
+
+For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
+
 🌐 **Live Hosted Version**
 [http://cloudpedagogy-curriculum-simulation-tool.s3-website.eu-west-2.amazonaws.com/](http://cloudpedagogy-curriculum-simulation-tool.s3-website.eu-west-2.amazonaws.com/)
 

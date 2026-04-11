@@ -67,5 +67,19 @@ export const demoDataset: MappingDataset = {
     { id: 'es3', sourceId: 'm4', sourceType: 'module', targetId: 's3', targetType: 'skill', type: 'develops' },
     { id: 'es4', sourceId: 'm7', sourceType: 'module', targetId: 's4', targetType: 'skill', type: 'develops' },
     { id: 'es5', sourceId: 'm8', sourceType: 'module', targetId: 's5', targetType: 'skill', type: 'develops' }
+  ],
+  programmes: [
+    {
+      id: 'p1',
+      name: 'BSc Public Health',
+      description: 'Core undergraduate programme in Public Health.',
+      moduleIds: ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9']
+    },
+    {
+      id: 'p2',
+      name: 'BSc Health Data Science',
+      description: 'Specialized programme focused on biostatistics and epidemiology.',
+      moduleIds: ['m2', 'm3', 'm9', 'm10']
+    }
   ]
 };

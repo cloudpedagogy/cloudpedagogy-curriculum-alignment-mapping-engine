@@ -5,6 +5,7 @@ import { demoDataset } from '../../data/demo';
 
 export const useMappingEngine = () => {
   const [dataset, setDataset] = useState<MappingDataset | null>(null);
+  const [activeProgrammeId, setActiveProgrammeId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Initialize dataset from storage
@@ -111,6 +112,10 @@ export const useMappingEngine = () => {
     });
   }, [dataset, updateDataset]);
 
+  const selectProgramme = useCallback((id: string | null) => {
+    setActiveProgrammeId(id);
+  }, []);
+
   return {
     dataset,
     isLoaded,
@@ -124,6 +129,8 @@ export const useMappingEngine = () => {
     removeRelationship,
     removeAssessment,
     removeOutcome,
-    updateDataset
+    updateDataset,
+    activeProgrammeId,
+    selectProgramme
   };
 };

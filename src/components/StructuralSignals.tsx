@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MappingDataset } from '../types';
 import { analyzeAlignment } from '../features/mapping/alignmentAnalysis';
+import { calculateAverageDensity, detectDisconnectedPathways } from '../lib/analysis';
 
 interface StructuralSignalsProps {
   dataset: MappingDataset;
@@ -8,6 +9,8 @@ interface StructuralSignalsProps {
 
 const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
   const signals = analyzeAlignment(dataset);
+  const avgDensity = calculateAverageDensity(dataset);
+  const disconnectedPaths = detectDisconnectedPathways(dataset);
 
   const renderSection = (title: string, items: React.ReactNode[]) => {
     if (items.length === 0) return null;
@@ -71,6 +74,19 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
     );
   });
 
+  const architectureItems = [
+    <div key="avg-density" className="signal-item">
+      <span className="signal-badge bg-blue-100 text-blue-700">Structural Density</span>
+      <span className="signal-text text-sm">Targeting ~1.5 assessments per outcome. Current: <strong>{avgDensity.toFixed(2)}</strong>.</span>
+    </div>,
+    ...disconnectedPaths.map((path, i) => (
+      <div key={`disconnected-${i}`} className="signal-item">
+        <span className="signal-badge bg-amber-100 text-amber-700">Progression Gap</span>
+        <span className="signal-text text-sm">Module <strong>{dataset.modules.find(m => m.id === path.moduleId)?.code}</strong>: {path.reason}</span>
+      </div>
+    ))
+  ];
+
   return (
     <div className="structural-signals-panel">
       <div className="panel-header mb-6">
@@ -93,6 +109,9 @@ const StructuralSignals: React.FC<StructuralSignalsProps> = ({ dataset }) => {
           {renderSection('Assessment Signals', assessmentItems) || (
             <p className="text-secondary italic">No assessment alignment signals detected.</p>
           )}
+        </div>
+        <div className="signal-group">
+          {renderSection('Architecture & Progression', architectureItems)}
         </div>
       </div>
     </div>

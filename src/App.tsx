@@ -7,6 +7,9 @@ import AssessmentMappingView from './components/AssessmentMappingView';
 import StructureEditor from './components/StructureEditor';
 import ValidationStatus from './components/ValidationStatus';
 import MethodologyPanel from './components/MethodologyPanel';
+import ProgrammeSelector from './features/programmes/ProgrammeSelector';
+import SkillCoverageHeatmap from './components/SkillCoverageHeatmap';
+import ProgressionExplorer from './components/ProgressionExplorer';
 import { useMappingEngine } from './features/mapping/useMappingEngine';
 import { calculateGraphMetrics } from './features/relationships/graphUtils';
 import { validateDataset } from './lib/validation/validator';
@@ -23,15 +26,49 @@ const App: React.FC = () => {
     addModule,
     addRelationship,
     removeModule,
-    removeAssessment
+    removeAssessment,
+    activeProgrammeId,
+    selectProgramme
   } = useMappingEngine();
   
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isMethodologyOpen, setIsMethodologyOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const metrics = useMemo(() => dataset ? calculateGraphMetrics(dataset) : null, [dataset]);
-  const validationIssues = useMemo(() => dataset ? validateDataset(dataset) : [], [dataset]);
+  const activeProgramme = useMemo(() => 
+    dataset?.programmes?.find(p => p.id === activeProgrammeId) || null
+  , [dataset, activeProgrammeId]);
+
+  const filteredDataset = useMemo(() => {
+    if (!dataset || !activeProgrammeId || !activeProgramme) return dataset;
+
+    const moduleIds = new Set(activeProgramme.moduleIds);
+    const filteredModules = dataset.modules.filter(m => moduleIds.has(m.id));
+    const filteredOutcomes = dataset.outcomes.filter(o => moduleIds.has(o.moduleId));
+    const filteredAssessments = dataset.assessments.filter(a => moduleIds.has(a.moduleId));
+    
+    const validEntityIds = new Set([
+      ...filteredModules.map(m => m.id),
+      ...filteredOutcomes.map(o => o.id),
+      ...filteredAssessments.map(a => a.id),
+      ...dataset.skills.map(s => s.id)
+    ]);
+
+    const filteredRelationships = dataset.relationships.filter(r => 
+      validEntityIds.has(r.sourceId) && validEntityIds.has(r.targetId)
+    );
+
+    return {
+      ...dataset,
+      modules: filteredModules,
+      outcomes: filteredOutcomes,
+      assessments: filteredAssessments,
+      relationships: filteredRelationships
+    };
+  }, [dataset, activeProgrammeId, activeProgramme]);
+
+  const metrics = useMemo(() => filteredDataset ? calculateGraphMetrics(filteredDataset) : null, [filteredDataset]);
+  const validationIssues = useMemo(() => filteredDataset ? validateDataset(filteredDataset) : [], [filteredDataset]);
 
   if (!isLoaded) return <div className="app-container">Loading...</div>;
 
@@ -157,26 +194,48 @@ const App: React.FC = () => {
             </div>
 
             <section className="mt-4">
+              <ProgrammeSelector 
+                programmes={dataset.programmes || []}
+                activeProgrammeId={activeProgrammeId}
+                onSelectProgramme={selectProgramme}
+              />
+            </section>
+
+            <section className="mt-4">
               <h2 className="mb-4">Curriculum Alignment Map</h2>
-              <CurriculumGraph dataset={dataset} />
+              <CurriculumGraph dataset={filteredDataset || dataset} />
+            </section>
+
+            <section className="mt-4">
+              <SkillCoverageHeatmap 
+                dataset={filteredDataset || dataset} 
+                moduleIdFilter={activeProgramme?.moduleIds}
+              />
+            </section>
+
+            <section className="mt-4">
+              <ProgressionExplorer 
+                dataset={filteredDataset || dataset} 
+                moduleIdFilter={activeProgramme?.moduleIds}
+              />
             </section>
 
             <section className="mt-4">
               <OutcomeCoverageMatrix 
-                dataset={dataset} 
+                dataset={filteredDataset || dataset} 
                 onRemoveModule={removeModule}
               />
             </section>
 
             <section className="mt-4">
               <AssessmentMappingView 
-                dataset={dataset} 
+                dataset={filteredDataset || dataset} 
                 onRemoveAssessment={removeAssessment}
               />
             </section>
 
             <section className="mt-4">
-              <StructuralSignals dataset={dataset} />
+              <StructuralSignals dataset={filteredDataset || dataset} />
             </section>
 
             {isEditorOpen && (

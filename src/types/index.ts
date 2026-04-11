@@ -1,4 +1,12 @@
 export type EntityType = 'module' | 'outcome' | 'assessment' | 'skill';
+export type RelationshipType = 'aligns' | 'assesses' | 'develops' | 'prerequisite';
+
+export interface Programme {
+  id: string;
+  name: string;
+  description?: string;
+  moduleIds: string[];
+}
 
 export interface Module {
   id: string;
@@ -51,4 +59,5 @@ export interface MappingDataset {
   assessments: Assessment[];
   skills: Skill[];
   relationships: Relationship[];
+  programmes?: Programme[];
 }
