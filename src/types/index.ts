@@ -60,4 +60,12 @@ export interface MappingDataset {
   skills: Skill[];
   relationships: Relationship[];
   programmes?: Programme[];
+  
+  // Lightweight capability and governance layer
+  // Optional, non-blocking, and does not alter core workflow
+  aiInvolvement?: string;
+  assumptions?: string;
+  risks?: string;
+  rationale?: string;
+  reviewNotes?: string;
 }

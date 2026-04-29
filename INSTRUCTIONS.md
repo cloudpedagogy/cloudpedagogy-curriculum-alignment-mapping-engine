@@ -48,3 +48,10 @@ This tool allows academic teams to structurally map and align university learnin
 ---
 ### 10. Tips
 - Ensure every learning outcome is mapped to at least one assessment to prevent governance warnings downstream.
+
+---
+### 11. Capability and Governance
+- **What the tool does:** It provides structured curriculum mapping while maintaining an optional layer for recording human judgements and AI involvement.
+- **How capability is developed through use:** By engaging with the optional fields (AI involvement, rationale, assumptions, etc.), users build awareness and skills in applying responsible AI and rigorous pedagogical practices.
+- **How governance is supported:** The optional governance panel records key assumptions, risks, and review notes alongside the structural dataset, ensuring that critical decisions are visible and accountable.
+- **Explanation of optional fields:** Fields like AI Involvement, Rationale, and Risks are completely optional. They do not block the core curriculum mapping workflow but serve as a non-intrusive way to document context.

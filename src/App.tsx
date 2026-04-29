@@ -7,6 +7,7 @@ import AssessmentMappingView from './components/AssessmentMappingView';
 import StructureEditor from './components/StructureEditor';
 import ValidationStatus from './components/ValidationStatus';
 import MethodologyPanel from './components/MethodologyPanel';
+import GovernancePanel from './components/GovernancePanel';
 import ProgrammeSelector from './features/programmes/ProgrammeSelector';
 import SkillCoverageHeatmap from './components/SkillCoverageHeatmap';
 import ProgressionExplorer from './components/ProgressionExplorer';
@@ -28,7 +29,8 @@ const App: React.FC = () => {
     removeModule,
     removeAssessment,
     activeProgrammeId,
-    selectProgramme
+    selectProgramme,
+    updateDataset
   } = useMappingEngine();
   
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -246,6 +248,11 @@ const App: React.FC = () => {
                 onClose={() => setIsEditorOpen(false)}
               />
             )}
+
+            <GovernancePanel 
+              dataset={dataset}
+              onUpdate={updateDataset}
+            />
 
             {isMethodologyOpen && (
               <MethodologyPanel 
