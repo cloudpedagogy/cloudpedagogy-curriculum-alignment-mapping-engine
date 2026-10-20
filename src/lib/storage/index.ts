@@ -16,6 +16,9 @@ export const loadDataset = (): MappingDataset | null => {
     return data ? JSON.parse(data) : null;
   } catch (error) {
     console.error('Failed to load dataset from localStorage', error);
+    if (typeof window !== 'undefined' && window.alert) {
+      window.alert('Warning: Saved curriculum data in local storage could not be parsed. Please verify your data or import a backup JSON file.');
+    }
     return null;
   }
 };

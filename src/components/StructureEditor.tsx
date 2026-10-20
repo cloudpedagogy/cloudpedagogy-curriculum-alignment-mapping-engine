@@ -3,14 +3,16 @@ import type { MappingDataset, Module, Relationship, EntityType, RelationshipType
 
 interface StructureEditorProps {
   dataset: MappingDataset;
+  isInline?: boolean;
   onAddModule: (module: Module) => void;
   onAddRelationship: (rel: Relationship) => void;
   onRemoveRelationship?: (id: string) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const StructureEditor: React.FC<StructureEditorProps> = ({
   dataset,
+  isInline = false,
   onAddModule,
   onAddRelationship,
   onRemoveRelationship,
@@ -220,36 +222,44 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
     );
   };
 
+  const editorContent = (
+    <div className={isInline ? "structure-editor-inline" : "structure-editor-panel"}>
+      <div className="editor-header">
+        <h2>Structure Explorer</h2>
+        {onClose && <button className="close-btn" onClick={onClose} aria-label="Close editor">✕</button>}
+      </div>
+
+      <div className="editor-tabs">
+        <button
+          className={`tab-btn ${activeTab === 'module' ? 'active' : ''}`}
+          onClick={() => setActiveTab('module')}
+        > Add Module </button>
+        <button
+          className={`tab-btn ${activeTab === 'relationship' ? 'active' : ''}`}
+          onClick={() => setActiveTab('relationship')}
+        > Manage Links </button>
+      </div>
+
+      <div className="editor-content">
+        {activeTab === 'module' ? renderModuleForm() : renderRelationshipForm()}
+      </div>
+
+      <div className="editor-footer mt-4">
+        <p className="text-secondary text-xs">
+          Structural changes reflect in real-time across all views.
+          Use "Reset Data" in the Data workspace to revert.
+        </p>
+      </div>
+    </div>
+  );
+
+  if (isInline) {
+    return editorContent;
+  }
+
   return (
     <div className="structure-editor-overlay">
-      <div className="structure-editor-panel">
-        <div className="editor-header">
-          <h2>Structure Explorer</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
-        </div>
-
-        <div className="editor-tabs">
-          <button
-            className={`tab-btn ${activeTab === 'module' ? 'active' : ''}`}
-            onClick={() => setActiveTab('module')}
-          > Add Module </button>
-          <button
-            className={`tab-btn ${activeTab === 'relationship' ? 'active' : ''}`}
-            onClick={() => setActiveTab('relationship')}
-          > Manage Links </button>
-        </div>
-
-        <div className="editor-content">
-          {activeTab === 'module' ? renderModuleForm() : renderRelationshipForm()}
-        </div>
-
-        <div className="editor-footer mt-4">
-          <p className="text-secondary text-xs">
-            Structural changes reflect in real-time across all views.
-            Use "Reset Data" in the main dashboard to revert.
-          </p>
-        </div>
-      </div>
+      {editorContent}
     </div>
   );
 };
