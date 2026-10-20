@@ -176,6 +176,7 @@ const ProgrammeEditor: React.FC<ProgrammeEditorProps> = ({
             </div>
             <button
               type="button"
+              id="btn-new-programme"
               className="btn btn-primary btn-sm flex items-center gap-1"
               onClick={startCreate}
             >

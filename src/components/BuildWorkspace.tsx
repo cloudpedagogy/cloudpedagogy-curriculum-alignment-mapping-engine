@@ -14,7 +14,7 @@ import ModuleEditor from './authoring/ModuleEditor';
 import OutcomeEditor from './authoring/OutcomeEditor';
 import AssessmentEditor from './authoring/AssessmentEditor';
 import SkillEditor from './authoring/SkillEditor';
-import StructureEditor from './StructureEditor';
+import RelationshipEditor from './authoring/RelationshipEditor';
 
 export type BuildEntityTab = 'programmes' | 'modules' | 'outcomes' | 'assessments' | 'skills' | 'relationships';
 
@@ -167,18 +167,13 @@ const BuildWorkspace: React.FC<BuildWorkspaceProps> = ({
         )}
 
         {activeTab === 'relationships' && (
-          <div className="relationships-legacy-wrapper">
-            <div className="mb-3 text-xs text-slate-500">
-              Manage relational links and alignment edges across curriculum entities. Comprehensive visual relationship mapping will be extended in Phase 2B.
-            </div>
-            <StructureEditor
-              dataset={dataset}
-              isInline={true}
-              onAddModule={() => {}}
-              onAddRelationship={onAddRelationship}
-              onRemoveRelationship={onRemoveRelationship}
-            />
-          </div>
+          <RelationshipEditor
+            dataset={dataset}
+            activeProgrammeId={activeProgrammeId}
+            onAddRelationship={onAddRelationship}
+            onRemoveRelationship={onRemoveRelationship}
+            onSaveProgramme={onSaveProgramme}
+          />
         )}
       </div>
     </div>

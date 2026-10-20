@@ -210,6 +210,7 @@ const AssessmentEditor: React.FC<AssessmentEditorProps> = ({
             </div>
             <button
               type="button"
+              id="btn-new-assessment"
               className="btn btn-primary btn-sm flex items-center gap-1"
               onClick={startCreate}
             >

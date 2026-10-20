@@ -222,6 +222,7 @@ const SkillEditor: React.FC<SkillEditorProps> = ({
             </div>
             <button
               type="button"
+              id="btn-new-skill"
               className="btn btn-primary btn-sm flex items-center gap-1"
               onClick={startCreate}
             >

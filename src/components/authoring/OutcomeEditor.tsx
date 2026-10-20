@@ -185,6 +185,7 @@ const OutcomeEditor: React.FC<OutcomeEditorProps> = ({
             </div>
             <button
               type="button"
+              id="btn-new-outcome"
               className="btn btn-primary btn-sm flex items-center gap-1"
               onClick={startCreate}
             >

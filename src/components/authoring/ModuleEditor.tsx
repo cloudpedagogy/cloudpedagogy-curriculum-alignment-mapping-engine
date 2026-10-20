@@ -202,6 +202,7 @@ const ModuleEditor: React.FC<ModuleEditorProps> = ({
             </div>
             <button
               type="button"
+              id="btn-new-module"
               className="btn btn-primary btn-sm flex items-center gap-1"
               onClick={startCreate}
             >
