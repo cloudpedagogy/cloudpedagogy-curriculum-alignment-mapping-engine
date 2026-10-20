@@ -112,37 +112,77 @@ const OverviewWorkspace: React.FC<OverviewWorkspaceProps> = ({
       {/* 3. Structural Summary & Prioritised Observations */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="overview-card p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
-          <h3 className="text-base font-semibold text-slate-800 mb-3 flex items-center gap-2">
-            <span>📊</span> Structural Overview
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-slate-800 flex items-center gap-2">
+              <span>📊</span> Curriculum Topology & Cohesion
+            </h3>
+          </div>
           <p className="text-xs text-slate-500 mb-4">
-            Key relational topology indicators across your curriculum network.
+            Relational structure and connectedness across modules, outcomes, assessments, and skills.
           </p>
 
           <div className="space-y-3 text-xs">
-            <div className="flex justify-between items-center py-2 border-b border-slate-100">
-              <span className="text-slate-600 font-medium">Total Relationships:</span>
-              <span className="font-bold text-slate-800">{dataset.relationships.length}</span>
+            <div className="py-2 border-b border-slate-100">
+              <div className="flex justify-between items-center mb-0.5">
+                <span className="text-slate-600 font-medium">Total Curriculum Alignments:</span>
+                <span className="font-bold text-slate-800">{dataset.relationships.length}</span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Explicit connections linking modules to outcomes, assessments, prerequisites, and skills.
+              </p>
             </div>
+
             {metrics && (
               <>
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-600 font-medium">Connected Graph Components:</span>
-                  <span className="font-bold text-slate-800">{metrics.connectedComponents}</span>
+                <div className="py-2 border-b border-slate-100">
+                  <div className="flex justify-between items-center mb-0.5">
+                    <span className="text-slate-600 font-medium">Connected Curriculum Clusters:</span>
+                    <span className="font-bold text-slate-800">{metrics.connectedComponents}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Interconnected sub-networks. Multiple clusters typically represent distinct programmes, specialist pathways, or elective diets.
+                  </p>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-600 font-medium">Unlinked / Isolated Entities:</span>
-                  <span className={`font-bold ${metrics.orphanedEntities > 0 ? 'text-amber-600' : 'text-slate-800'}`}>
-                    {metrics.orphanedEntities}
-                  </span>
+
+                <div className="py-2 border-b border-slate-100">
+                  <div className="flex justify-between items-center mb-0.5">
+                    <span className="text-slate-600 font-medium">Standalone / Unlinked Elements:</span>
+                    <span className={`font-bold ${metrics.orphanedEntities > 0 ? 'text-blue-600' : 'text-slate-800'}`}>
+                      {metrics.orphanedEntities}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Elements with no recorded links (e.g. newly drafted items, standalone electives, or general competencies).
+                  </p>
                 </div>
               </>
             )}
-            <div className="flex justify-between items-center py-2">
-              <span className="text-slate-600 font-medium">Defined Programmes / Diets:</span>
-              <span className="font-bold text-slate-800">{dataset.programmes?.length || 0}</span>
+
+            <div className="py-2">
+              <div className="flex justify-between items-center mb-0.5">
+                <span className="text-slate-600 font-medium">Defined Programmes / Diets:</span>
+                <span className="font-bold text-slate-800">{dataset.programmes?.length || 0}</span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Formal award structures and course pathways defined in this curriculum model.
+              </p>
             </div>
           </div>
+
+          {metrics && metrics.orphanedEntities > 0 && (
+            <div className="mt-4 pt-3 border-t border-slate-100">
+              <details className="text-[11px] text-slate-500">
+                <summary className="cursor-pointer font-medium text-slate-700 hover:text-blue-600">
+                  Advanced Graph Topology Details
+                </summary>
+                <div className="mt-2 p-2 bg-slate-50 rounded border border-slate-200 space-y-1 font-mono text-[10px]">
+                  <div>Total Nodes: {dataset.modules.length + dataset.outcomes.length + dataset.assessments.length + dataset.skills.length}</div>
+                  <div>Graph Components: {metrics.connectedComponents}</div>
+                  <div>Unlinked Entity IDs: {metrics.isolatedEntityIds.join(', ')}</div>
+                </div>
+              </details>
+            </div>
+          )}
         </div>
 
         <div className="overview-card p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
@@ -150,42 +190,59 @@ const OverviewWorkspace: React.FC<OverviewWorkspaceProps> = ({
             <span>💡</span> Prioritised Alignment Observations
           </h3>
           <p className="text-xs text-slate-500 mb-4">
-            Key pedagogical signals identified for curriculum committee review.
+            Key pedagogical indicators identified for curriculum committee review.
           </p>
 
-          <div className="space-y-2 text-xs">
+          <div className="space-y-3 text-xs">
             {signals.outcomeSignals.unassessed.length > 0 ? (
-              <div className="flex items-start gap-2 p-2 bg-amber-50 rounded border border-amber-200 text-amber-800">
-                <span>⚠️</span>
-                <div>
-                  <strong>{signals.outcomeSignals.unassessed.length} unassessed outcome(s)</strong>
-                  <p className="text-[11px] text-amber-700">Taught in modules but not linked to a formal assessment component.</p>
+              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900 uppercase">
+                    Review Advisory
+                  </span>
+                  <strong>{signals.outcomeSignals.unassessed.length} outcome(s) without mapped assessments</strong>
                 </div>
+                <p className="text-[11px] text-amber-800 leading-relaxed">
+                  Taught in modules but not linked to a formal assessment task. Review whether assessed holistically, formatively, or requiring dedicated assessment evidence.
+                </p>
               </div>
             ) : (
-              <div className="flex items-center gap-2 p-2 bg-emerald-50 rounded border border-emerald-200 text-emerald-800">
+              <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-emerald-800 flex items-center gap-2">
                 <span>✓</span>
-                <span>All outcomes have mapped assessments.</span>
+                <span className="font-semibold">All learning outcomes have recorded assessment mappings.</span>
               </div>
             )}
 
-            {signals.skillSignals.weaklyRepresented.length > 0 && (
-              <div className="flex items-start gap-2 p-2 bg-blue-50 rounded border border-blue-200 text-blue-800">
-                <span>ℹ️</span>
-                <div>
-                  <strong>{signals.skillSignals.weaklyRepresented.length} skill(s) with minimal coverage</strong>
-                  <p className="text-[11px] text-blue-700">Explicitly developed in one or fewer modules.</p>
+            {signals.skillSignals.weaklyRepresented.length > 0 ? (
+              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200 text-blue-900">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-200 text-blue-900 uppercase">
+                    Pedagogical Note
+                  </span>
+                  <strong>{signals.skillSignals.weaklyRepresented.length} skill(s) with single-module mapping</strong>
                 </div>
+                <p className="text-[11px] text-blue-800 leading-relaxed">
+                  Explicitly developed in one or fewer modules. Common for specialist competencies; verify whether broader vertical progression across modules is intended.
+                </p>
+              </div>
+            ) : (
+              <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-emerald-800 flex items-center gap-2">
+                <span>✓</span>
+                <span className="font-semibold">All skills are reinforced across multiple modules.</span>
               </div>
             )}
 
             {signals.assessmentSignals.assessmentDenseModules.length > 0 && (
-              <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-200 text-slate-700">
-                <span>📝</span>
-                <div>
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-800">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-800 uppercase">
+                    Workload Observation
+                  </span>
                   <strong>High assessment density in {signals.assessmentSignals.assessmentDenseModules.length} module(s)</strong>
-                  <p className="text-[11px] text-slate-500">More than 2 assessments relative to learning outcomes.</p>
                 </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Multiple assessment tasks relative to learning outcomes. Review student assessment workload and balance between formative and summative tasks.
+                </p>
               </div>
             )}
           </div>

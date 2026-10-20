@@ -30,7 +30,9 @@ const ProgressionExplorer: React.FC<ProgressionExplorerProps> = ({ dataset, modu
     <div className="progression-explorer-panel p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <div className="panel-header mb-6">
         <h2 className="text-xl font-bold text-slate-800">Dependency & Progression Mapping</h2>
-        <p className="text-slate-500">Visualization of prerequisite chains and disconnected study pathways.</p>
+        <p className="text-slate-500 text-sm">
+          Visualization of prerequisite chains and pedagogical progression pathways across module levels.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -68,14 +70,14 @@ const ProgressionExplorer: React.FC<ProgressionExplorerProps> = ({ dataset, modu
 
         <div className="disconnected-paths-section">
           <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-            <span>🔀 Disconnected Pathways</span>
+            <span>🧭 Pathway Observations (Heuristic)</span>
           </h3>
           <div className="space-y-3">
             {activeGaps.map((gap, index) => {
               const m = modules.find(x => x.id === gap.moduleId);
               return (
-                <div key={`gap-${index}`} className="flex items-start gap-3 p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg">
-                  <span className="text-amber-600 text-lg">⚠️</span>
+                <div key={`gap-${index}`} className="flex items-start gap-3 p-3 border-l-4 border-blue-400 bg-slate-50 rounded-r-lg">
+                  <span className="text-blue-600 text-base">ℹ️</span>
                   <div>
                     <div className="text-xs font-bold text-slate-800">{m?.code}: {m?.title}</div>
                     <div className="text-[11px] text-slate-600">{gap.reason}</div>
@@ -84,7 +86,7 @@ const ProgressionExplorer: React.FC<ProgressionExplorerProps> = ({ dataset, modu
               );
             })}
             {activeGaps.length === 0 && (
-              <p className="text-xs text-slate-400 italic">All modules fit established progression patterns.</p>
+              <p className="text-xs text-slate-400 italic">All modules align with standard prerequisite progression sequences.</p>
             )}
           </div>
         </div>

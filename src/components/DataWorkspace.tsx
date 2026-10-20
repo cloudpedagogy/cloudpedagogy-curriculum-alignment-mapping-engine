@@ -205,10 +205,10 @@ const DataWorkspace: React.FC<DataWorkspaceProps> = ({
         </div>
       </div>
 
-      {/* Validation & System Health Status */}
+      {/* Data Integrity & Educational Diagnostics */}
       <div className="validation-section mt-6">
         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">
-          Validation & Structural Integrity Diagnostics
+          Data Integrity Diagnostics & Educational Observations
         </h3>
         <ValidationStatus issues={validationIssues} />
       </div>

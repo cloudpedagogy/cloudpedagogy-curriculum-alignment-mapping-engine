@@ -253,12 +253,23 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
     </div>
   );
 
+  React.useEffect(() => {
+    if (isInline || !onClose) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isInline, onClose]);
+
   if (isInline) {
     return editorContent;
   }
 
   return (
-    <div className="structure-editor-overlay">
+    <div className="structure-editor-overlay" role="dialog" aria-modal="true" aria-label="Structure Explorer">
       {editorContent}
     </div>
   );

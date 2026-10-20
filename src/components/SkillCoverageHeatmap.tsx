@@ -32,7 +32,9 @@ const SkillCoverageHeatmap: React.FC<SkillCoverageHeatmapProps> = ({ dataset, mo
     <div className="skill-heatmap-panel p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <div className="panel-header mb-6">
         <h2 className="text-xl font-bold text-slate-800">Skill Coverage Heatmap</h2>
-        <p className="text-slate-500">Analysis of direct skill development across module levels (v1: Direct links only).</p>
+        <p className="text-slate-500 text-sm">
+          Analysis of direct skill development across module levels, documenting where graduate competencies are formally addressed in the curriculum.
+        </p>
       </div>
 
       <div className="overflow-x-auto">

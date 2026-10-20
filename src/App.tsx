@@ -322,12 +322,16 @@ const App: React.FC = () => {
                 )}
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Curriculum Alignment Map</h3>
+                  <div className="panel-header mb-3">
+                    <h3 className="text-xl font-bold text-slate-800">Curriculum Alignment Map</h3>
+                    <p className="text-secondary text-sm">
+                      Interactive multipartite graph connecting modules, learning outcomes, assessment tasks, and graduate skills.
+                    </p>
+                  </div>
                   <CurriculumGraph dataset={filteredDataset || dataset} />
                 </section>
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Skill Coverage Heatmap</h3>
                   <SkillCoverageHeatmap
                     dataset={filteredDataset || dataset}
                     moduleIdFilter={activeProgramme?.moduleIds}
@@ -335,7 +339,6 @@ const App: React.FC = () => {
                 </section>
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Dependency & Progression Mapping</h3>
                   <ProgressionExplorer
                     dataset={filteredDataset || dataset}
                     moduleIdFilter={activeProgramme?.moduleIds}
@@ -365,24 +368,14 @@ const App: React.FC = () => {
                 )}
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Outcome Coverage Matrix</h3>
-                  <OutcomeCoverageMatrix
-                    dataset={filteredDataset || dataset}
-                    onRemoveModule={removeModule}
-                    onRemoveOutcome={removeOutcome}
-                  />
+                  <OutcomeCoverageMatrix dataset={filteredDataset || dataset} />
                 </section>
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Assessment Structural Mapping</h3>
-                  <AssessmentMappingView
-                    dataset={filteredDataset || dataset}
-                    onRemoveAssessment={removeAssessment}
-                  />
+                  <AssessmentMappingView dataset={filteredDataset || dataset} />
                 </section>
 
                 <section className="mb-8">
-                  <h3 className="text-base font-semibold mb-3">Structural Alignment Analysis</h3>
                   <StructuralSignals dataset={filteredDataset || dataset} />
                 </section>
               </div>

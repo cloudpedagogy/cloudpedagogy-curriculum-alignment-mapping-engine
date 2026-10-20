@@ -19,17 +19,27 @@ interface MethodologyPanelProps {
 }
 
 const MethodologyPanel: React.FC<MethodologyPanelProps> = ({ onClose }) => {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="methodology-modal-overlay">
+    <div className="methodology-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="methodology-title">
       <div className="methodology-modal-panel">
         <div className="modal-header">
-          <h2>Governance & Methodology</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <h2 id="methodology-title">Governance & Methodology</h2>
+          <button className="close-btn" onClick={onClose} aria-label="Close dialog">✕</button>
         </div>
 
         <div className="modal-content p-6 overflow-y-auto">
           <div className="methodology-intro mb-6">
-            <p>This tool is designed to provide a structural foundation for curriculum architecture. It serves as an interpretive aid for academic leadership and curriculum designers, reinforcing the role of professional judgement in alignmnent mapping.</p>
+            <p>This tool is designed to provide a structural foundation for curriculum architecture. It serves as an interpretive aid for academic leadership and curriculum designers, reinforcing the role of professional judgement in alignment mapping.</p>
           </div>
 
           <MethodologySection title="1. What This Tool Does">

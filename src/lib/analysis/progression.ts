@@ -64,18 +64,16 @@ export const detectDisconnectedPathways = (dataset: MappingDataset): Disconnecte
     if (level > 4 && !hasPrereqs) {
       paths.push({
         moduleId: module.id,
-        reason: `Level ${level} module has no defined prerequisites.`
+        reason: `Level ${level} module has no formal prerequisites listed. Review whether prior foundational knowledge is assumed or if this module is intended to be open-entry.`
       });
     }
 
     // Rule 2: Entry level modules (4) that are prerequisites for nothing
     const isPrereqFor = prereqRels.some(r => r.targetId === module.id);
     if (level === 4 && !isPrereqFor) {
-      // This might be valid, so we flag it as a potential "Dead End" entry point
-      // But only if there are other modules it COULD lead to
       paths.push({
         moduleId: module.id,
-        reason: `Entry-level module is not a prerequisite for any further study.`
+        reason: `Level 4 module is not listed as a prerequisite for subsequent study. Typical for standalone electives or terminal introductory modules; review if intended as a gateway.`
       });
     }
   });
