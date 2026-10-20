@@ -1,5 +1,6 @@
 import React from 'react';
 import type { MappingDataset } from '../types';
+import { getAssessmentDeletionImpact } from '../lib/data/safeDeletion';
 
 interface AssessmentMappingViewProps {
   dataset: MappingDataset;
@@ -9,14 +10,26 @@ interface AssessmentMappingViewProps {
 const AssessmentMappingView: React.FC<AssessmentMappingViewProps> = ({ dataset, onRemoveAssessment }) => {
   const { modules, assessments, outcomes, relationships } = dataset;
 
+  const handleRemoveAssessment = (assessmentId: string) => {
+    if (!onRemoveAssessment) return;
+    const impact = getAssessmentDeletionImpact(dataset, assessmentId);
+    const promptMsg = impact.hasDependencies
+      ? `${impact.summaryMessage}\n\nProceed with deleting assessment '${impact.assessmentTitle}'?`
+      : `Delete assessment '${impact.assessmentTitle}'?`;
+
+    if (window.confirm(promptMsg)) {
+      onRemoveAssessment(assessmentId);
+    }
+  };
+
   const getModuleAssessments = (moduleId: string) => {
     // Both explicit 'aligns' from module to assessment, and implicit moduleId on assessment
     const explicitIds = relationships
       .filter(r => r.sourceId === moduleId && r.targetType === 'assessment' && r.type === 'aligns')
       .map(r => r.targetId);
-    
+
     const implicit = assessments.filter(a => a.moduleId === moduleId);
-    
+
     // Union of both sets to ensure full visibility
     const combined = [...implicit];
     explicitIds.forEach(id => {
@@ -52,7 +65,7 @@ const AssessmentMappingView: React.FC<AssessmentMappingViewProps> = ({ dataset, 
         {modules.map(module => {
           const moduleAssessments = getModuleAssessments(module.id);
           const isDense = isAssessmentDense(module.id, moduleAssessments.length);
-          
+
           return (
             <div key={module.id} className="module-assessment-group mb-8">
               <div className="module-tier-header mb-4">
@@ -71,7 +84,7 @@ const AssessmentMappingView: React.FC<AssessmentMappingViewProps> = ({ dataset, 
                 {moduleAssessments.length > 0 ? (
                   moduleAssessments.map(assessment => {
                     const assessedOutcomes = getAssessedOutcomes(assessment.id);
-                    
+
                     return (
                       <div key={assessment.id} className="assessment-card mb-4">
                         <div className="assessment-card-header mb-2">
@@ -80,7 +93,13 @@ const AssessmentMappingView: React.FC<AssessmentMappingViewProps> = ({ dataset, 
                             <div className="flex gap-2 items-center">
                               <h4 className="assessment-title">{assessment.title}</h4>
                               {onRemoveAssessment && (
-                                <button className="remove-btn" onClick={() => onRemoveAssessment(assessment.id)}>✕</button>
+                                <button
+                                  className="remove-btn"
+                                  title={`Delete assessment ${assessment.title}`}
+                                  onClick={() => handleRemoveAssessment(assessment.id)}
+                                >
+                                  ✕
+                                </button>
                               )}
                             </div>
                           </div>

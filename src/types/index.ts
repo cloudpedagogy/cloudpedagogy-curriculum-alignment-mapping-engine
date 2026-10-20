@@ -21,7 +21,7 @@ export interface LearningOutcome {
   id: string;
   code: string;
   description: string;
-  moduleId: string;
+  moduleId?: string;
 }
 
 export interface Assessment {
@@ -29,7 +29,7 @@ export interface Assessment {
   title: string;
   type: string;
   weight: number;
-  moduleId: string;
+  moduleId?: string;
 }
 
 export interface Skill {
@@ -46,7 +46,7 @@ export interface Relationship {
   targetId: string;
   targetType: EntityType;
   type: 'aligns' | 'assesses' | 'develops' | 'prerequisite';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface MappingDataset {

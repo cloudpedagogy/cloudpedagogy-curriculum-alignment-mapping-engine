@@ -1,21 +1,18 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { MappingDataset, Module, Relationship } from '../../types';
 import { loadDataset, saveDataset, clearDataset } from '../../lib/storage';
 import { demoDataset } from '../../data/demo';
+import {
+  safeDeleteModule,
+  safeDeleteAssessment,
+  safeDeleteOutcome,
+  safeDeleteRelationship
+} from '../../lib/data/safeDeletion';
 
 export const useMappingEngine = () => {
-  const [dataset, setDataset] = useState<MappingDataset | null>(null);
+  const [dataset, setDataset] = useState<MappingDataset | null>(() => loadDataset());
   const [activeProgrammeId, setActiveProgrammeId] = useState<string | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Initialize dataset from storage
-  useEffect(() => {
-    const stored = loadDataset();
-    if (stored) {
-      setDataset(stored);
-    }
-    setIsLoaded(true);
-  }, []);
+  const isLoaded = true;
 
   const updateDataset = useCallback((newDataset: MappingDataset | null) => {
     if (newDataset) {
@@ -64,52 +61,42 @@ export const useMappingEngine = () => {
     if (!dataset) return;
     updateDataset({
       ...dataset,
+      lastUpdated: new Date().toISOString(),
       modules: [...dataset.modules, module]
     });
   }, [dataset, updateDataset]);
 
   const removeModule = useCallback((moduleId: string) => {
     if (!dataset) return;
-    // Also remove any relationships linked to this module
-    updateDataset({
-      ...dataset,
-      modules: dataset.modules.filter(m => m.id !== moduleId),
-      relationships: dataset.relationships.filter(r => r.sourceId !== moduleId && r.targetId !== moduleId)
-    });
+    const updated = safeDeleteModule(dataset, moduleId);
+    updateDataset(updated);
   }, [dataset, updateDataset]);
 
   const addRelationship = useCallback((rel: Relationship) => {
     if (!dataset) return;
     updateDataset({
       ...dataset,
+      lastUpdated: new Date().toISOString(),
       relationships: [...dataset.relationships, rel]
     });
   }, [dataset, updateDataset]);
 
   const removeRelationship = useCallback((relId: string) => {
     if (!dataset) return;
-    updateDataset({
-      ...dataset,
-      relationships: dataset.relationships.filter(r => r.id !== relId)
-    });
+    const updated = safeDeleteRelationship(dataset, relId);
+    updateDataset(updated);
   }, [dataset, updateDataset]);
 
   const removeAssessment = useCallback((assessmentId: string) => {
     if (!dataset) return;
-    updateDataset({
-      ...dataset,
-      assessments: dataset.assessments.filter(a => a.id !== assessmentId),
-      relationships: dataset.relationships.filter(r => r.sourceId !== assessmentId && r.targetId !== assessmentId)
-    });
+    const updated = safeDeleteAssessment(dataset, assessmentId);
+    updateDataset(updated);
   }, [dataset, updateDataset]);
 
   const removeOutcome = useCallback((outcomeId: string) => {
     if (!dataset) return;
-    updateDataset({
-      ...dataset,
-      outcomes: dataset.outcomes.filter(o => o.id !== outcomeId),
-      relationships: dataset.relationships.filter(r => r.sourceId !== outcomeId && r.targetId !== outcomeId)
-    });
+    const updated = safeDeleteOutcome(dataset, outcomeId);
+    updateDataset(updated);
   }, [dataset, updateDataset]);
 
   const selectProgramme = useCallback((id: string | null) => {

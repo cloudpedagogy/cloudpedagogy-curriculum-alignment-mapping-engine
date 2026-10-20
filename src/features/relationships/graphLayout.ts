@@ -33,7 +33,7 @@ export const calculateLayout = (
   const nodes: NodePosition[] = [];
   const edges: EdgePath[] = [];
 
-  const columns: Record<EntityType, any[]> = {
+  const columns: Record<EntityType, Array<{ id: string }>> = {
     module: dataset.modules,
     outcome: dataset.outcomes,
     assessment: dataset.assessments,

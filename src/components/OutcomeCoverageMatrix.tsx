@@ -1,13 +1,43 @@
 import React from 'react';
 import type { MappingDataset } from '../types';
+import { getModuleDeletionImpact, getOutcomeDeletionImpact } from '../lib/data/safeDeletion';
 
 interface OutcomeCoverageMatrixProps {
   dataset: MappingDataset;
   onRemoveModule?: (id: string) => void;
+  onRemoveOutcome?: (id: string) => void;
 }
 
-const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, onRemoveModule }) => {
+const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({
+  dataset,
+  onRemoveModule,
+  onRemoveOutcome
+}) => {
   const { modules, outcomes, relationships } = dataset;
+
+  const handleRemoveModule = (moduleId: string) => {
+    if (!onRemoveModule) return;
+    const impact = getModuleDeletionImpact(dataset, moduleId);
+    const promptMsg = impact.hasDependencies
+      ? `${impact.summaryMessage}\n\nOwned assessments, exclusively owned outcomes, and prerequisite links will be removed. Shared outcomes referenced by other modules will be preserved.\n\nProceed with deleting module ${impact.moduleCode}?`
+      : `Delete unreferenced module ${impact.moduleCode} (${impact.moduleTitle})?`;
+
+    if (window.confirm(promptMsg)) {
+      onRemoveModule(moduleId);
+    }
+  };
+
+  const handleRemoveOutcome = (outcomeId: string) => {
+    if (!onRemoveOutcome) return;
+    const impact = getOutcomeDeletionImpact(dataset, outcomeId);
+    const promptMsg = impact.hasDependencies
+      ? `${impact.summaryMessage}\n\nDeleting this outcome will unlink these mappings. Linked modules and assessments will remain intact.\n\nProceed with deleting outcome ${impact.outcomeCode}?`
+      : `Delete unreferenced outcome ${impact.outcomeCode}?`;
+
+    if (window.confirm(promptMsg)) {
+      onRemoveOutcome(outcomeId);
+    }
+  };
 
   // 1. Group and sort modules by level
   const sortedModules = [...modules].sort((a, b) => {
@@ -19,13 +49,13 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
 
   // 2. Alignment Lookup
   const getAlignmentInfo = (outcomeId: string, moduleId: string) => {
-    const aligns = relationships.some(r => 
+    const aligns = relationships.some(r =>
       r.sourceId === moduleId && r.targetId === outcomeId && r.type === 'aligns'
     );
-    
+
     // Check if any assessment in this module assesses this outcome
-    const assesses = relationships.some(r => 
-      r.targetId === outcomeId && r.type === 'assesses' && 
+    const assesses = relationships.some(r =>
+      r.targetId === outcomeId && r.type === 'assesses' &&
       dataset.assessments.find(a => a.id === r.sourceId)?.moduleId === moduleId
     );
 
@@ -49,7 +79,13 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
                   <div className="module-header-content">
                     <div className="module-level">L{m.level}</div>
                     {onRemoveModule && (
-                      <button className="remove-btn" onClick={() => onRemoveModule(m.id)}>✕</button>
+                      <button
+                        className="remove-btn"
+                        title={`Delete module ${m.code}`}
+                        onClick={() => handleRemoveModule(m.id)}
+                      >
+                        ✕
+                      </button>
                     )}
                   </div>
                   <div className="module-code">{m.code}</div>
@@ -68,9 +104,20 @@ const OutcomeCoverageMatrix: React.FC<OutcomeCoverageMatrixProps> = ({ dataset, 
               return (
                 <tr key={outcome.id}>
                   <td className="sticky-col first-col">
-                    <div className="outcome-row-header">
-                      <span className="outcome-code">{outcome.code}</span>
-                      <span className="outcome-desc">{outcome.description}</span>
+                    <div className="outcome-row-header flex items-center justify-between gap-2">
+                      <div>
+                        <span className="outcome-code">{outcome.code}</span>
+                        <span className="outcome-desc">{outcome.description}</span>
+                      </div>
+                      {onRemoveOutcome && (
+                        <button
+                          className="remove-btn"
+                          title={`Delete outcome ${outcome.code}`}
+                          onClick={() => handleRemoveOutcome(outcome.id)}
+                        >
+                          ✕
+                        </button>
+                      )}
                     </div>
                   </td>
                   {sortedModules.map(m => {

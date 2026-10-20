@@ -26,8 +26,10 @@ const App: React.FC = () => {
     exportData,
     addModule,
     addRelationship,
+    removeRelationship,
     removeModule,
     removeAssessment,
+    removeOutcome,
     activeProgrammeId,
     selectProgramme,
     updateDataset
@@ -46,8 +48,8 @@ const App: React.FC = () => {
 
     const moduleIds = new Set(activeProgramme.moduleIds);
     const filteredModules = dataset.modules.filter(m => moduleIds.has(m.id));
-    const filteredOutcomes = dataset.outcomes.filter(o => moduleIds.has(o.moduleId));
-    const filteredAssessments = dataset.assessments.filter(a => moduleIds.has(a.moduleId));
+    const filteredOutcomes = dataset.outcomes.filter(o => o.moduleId ? moduleIds.has(o.moduleId) : false);
+    const filteredAssessments = dataset.assessments.filter(a => a.moduleId ? moduleIds.has(a.moduleId) : false);
     
     const validEntityIds = new Set([
       ...filteredModules.map(m => m.id),
@@ -226,6 +228,7 @@ const App: React.FC = () => {
               <OutcomeCoverageMatrix 
                 dataset={filteredDataset || dataset} 
                 onRemoveModule={removeModule}
+                onRemoveOutcome={removeOutcome}
               />
             </section>
 
@@ -245,6 +248,7 @@ const App: React.FC = () => {
                 dataset={dataset}
                 onAddModule={addModule}
                 onAddRelationship={addRelationship}
+                onRemoveRelationship={removeRelationship}
                 onClose={() => setIsEditorOpen(false)}
               />
             )}
