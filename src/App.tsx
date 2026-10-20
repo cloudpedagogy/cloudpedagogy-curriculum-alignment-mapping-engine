@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo, useCallback } from 'react';
-import type { MappingDataset } from './types';
+import type { MappingDataset, Programme, Module, LearningOutcome, Assessment, Skill } from './types';
 import Navigation, { type WorkspaceTab } from './components/Navigation';
 import WelcomeScreen from './components/WelcomeScreen';
 import OverviewWorkspace from './components/OverviewWorkspace';
@@ -28,12 +28,23 @@ const App: React.FC = () => {
     resetData,
     importData,
     exportData,
+    addProgramme,
+    updateProgramme,
+    removeProgramme,
     addModule,
+    updateModule,
+    removeModule,
+    addOutcome,
+    updateOutcome,
+    removeOutcome,
+    addAssessment,
+    updateAssessment,
+    removeAssessment,
+    addSkill,
+    updateSkill,
+    removeSkill,
     addRelationship,
     removeRelationship,
-    removeModule,
-    removeAssessment,
-    removeOutcome,
     activeProgrammeId,
     selectProgramme,
     updateDataset
@@ -62,14 +73,7 @@ const App: React.FC = () => {
       name: 'New Curriculum Model',
       version: '1.0.0',
       lastUpdated: new Date().toISOString(),
-      programmes: [
-        {
-          id: 'prog_default',
-          name: 'Primary Programme',
-          description: 'Initial curriculum programme structure',
-          moduleIds: []
-        }
-      ],
+      programmes: [],
       modules: [],
       outcomes: [],
       assessments: [],
@@ -79,6 +83,51 @@ const App: React.FC = () => {
     updateDataset(blankDataset);
     handleSelectTab('build');
   }, [updateDataset, handleSelectTab]);
+
+  const handleSaveProgramme = useCallback((programme: Programme) => {
+    const exists = (dataset?.programmes || []).some(p => p.id === programme.id);
+    if (exists) {
+      updateProgramme(programme);
+    } else {
+      addProgramme(programme);
+    }
+  }, [dataset, updateProgramme, addProgramme]);
+
+  const handleSaveModule = useCallback((module: Module, programmeIds?: string[]) => {
+    const exists = (dataset?.modules || []).some(m => m.id === module.id);
+    if (exists) {
+      updateModule(module, programmeIds);
+    } else {
+      addModule(module, programmeIds);
+    }
+  }, [dataset, updateModule, addModule]);
+
+  const handleSaveOutcome = useCallback((outcome: LearningOutcome) => {
+    const exists = (dataset?.outcomes || []).some(o => o.id === outcome.id);
+    if (exists) {
+      updateOutcome(outcome);
+    } else {
+      addOutcome(outcome);
+    }
+  }, [dataset, updateOutcome, addOutcome]);
+
+  const handleSaveAssessment = useCallback((assessment: Assessment) => {
+    const exists = (dataset?.assessments || []).some(a => a.id === assessment.id);
+    if (exists) {
+      updateAssessment(assessment);
+    } else {
+      addAssessment(assessment);
+    }
+  }, [dataset, updateAssessment, addAssessment]);
+
+  const handleSaveSkill = useCallback((skill: Skill) => {
+    const exists = (dataset?.skills || []).some(s => s.id === skill.id);
+    if (exists) {
+      updateSkill(skill);
+    } else {
+      addSkill(skill);
+    }
+  }, [dataset, updateSkill, addSkill]);
 
   const handleLoadDemo = useCallback(() => {
     loadDemo();
@@ -97,10 +146,20 @@ const App: React.FC = () => {
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (dataset && dataset.modules.length > 0) {
+        const confirmed = window.confirm(
+          `Importing "${file.name}" will replace your active curriculum model ("${dataset.name}"). Any unexported changes will be lost.\n\nDo you wish to proceed?`
+        );
+        if (!confirmed) {
+          e.target.value = '';
+          return;
+        }
+      }
       importData(file);
       handleSelectTab('overview');
+      e.target.value = '';
     }
-  }, [importData, handleSelectTab]);
+  }, [dataset, importData, handleSelectTab]);
 
   const activeProgramme = useMemo(() =>
     dataset?.programmes?.find(p => p.id === activeProgrammeId) || null
@@ -227,7 +286,16 @@ const App: React.FC = () => {
                 dataset={dataset}
                 activeProgrammeId={activeProgrammeId}
                 onSelectProgramme={selectProgramme}
-                onAddModule={addModule}
+                onSaveProgramme={handleSaveProgramme}
+                onDeleteProgramme={removeProgramme}
+                onSaveModule={handleSaveModule}
+                onDeleteModule={removeModule}
+                onSaveOutcome={handleSaveOutcome}
+                onDeleteOutcome={removeOutcome}
+                onSaveAssessment={handleSaveAssessment}
+                onDeleteAssessment={removeAssessment}
+                onSaveSkill={handleSaveSkill}
+                onDeleteSkill={removeSkill}
                 onAddRelationship={addRelationship}
                 onRemoveRelationship={removeRelationship}
               />

@@ -31,8 +31,15 @@ const OverviewWorkspace: React.FC<OverviewWorkspaceProps> = ({
       <div className="overview-header-card mb-6 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-1">
-              Active Curriculum Model
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                Active Curriculum Model
+              </span>
+              {dataset.id === 'ph-demo-dataset-v1' && (
+                <span className="px-2 py-0.5 text-[10px] font-semibold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+                  Example Demonstration Dataset
+                </span>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-slate-800">
               {activeProgramme ? `${activeProgramme.name} (${dataset.name})` : dataset.name}

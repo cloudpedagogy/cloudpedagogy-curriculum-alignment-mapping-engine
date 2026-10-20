@@ -30,6 +30,22 @@ export interface OutcomeDeletionImpact {
   summaryMessage: string;
 }
 
+export interface SkillDeletionImpact {
+  skillExists: boolean;
+  skillName: string;
+  hasDependencies: boolean;
+  developsRelationshipsCount: number;
+  summaryMessage: string;
+}
+
+export interface ProgrammeDeletionImpact {
+  programmeExists: boolean;
+  programmeName: string;
+  hasDependencies: boolean;
+  associatedModulesCount: number;
+  summaryMessage: string;
+}
+
 /**
  * Checks whether an outcome associated with a module is shared elsewhere:
  * - Has explicit 'aligns' relationship from another module
@@ -208,6 +224,75 @@ export const getOutcomeDeletionImpact = (
     hasDependencies,
     alignedModulesCount: alignedModules.length,
     assessingAssessmentsCount: assessingAssessments.length,
+    summaryMessage
+  };
+};
+
+/**
+ * Analyzes the impact of deleting a skill.
+ */
+export const getSkillDeletionImpact = (
+  dataset: MappingDataset,
+  skillId: string
+): SkillDeletionImpact => {
+  const skill = dataset.skills.find(s => s.id === skillId);
+  if (!skill) {
+    return {
+      skillExists: false,
+      skillName: '',
+      hasDependencies: false,
+      developsRelationshipsCount: 0,
+      summaryMessage: 'Skill does not exist.'
+    };
+  }
+
+  const relationships = dataset.relationships.filter(
+    r => (r.sourceId === skillId || r.targetId === skillId)
+  );
+
+  const hasDependencies = relationships.length > 0;
+  const summaryMessage = hasDependencies
+    ? `Skill '${skill.name}' is referenced in ${relationships.length} relationship(s). Deleting it will unlink these connections; modules will remain intact.`
+    : `Skill '${skill.name}' has no active relationship links and is safe to delete.`;
+
+  return {
+    skillExists: true,
+    skillName: skill.name,
+    hasDependencies,
+    developsRelationshipsCount: relationships.length,
+    summaryMessage
+  };
+};
+
+/**
+ * Analyzes the impact of deleting a programme.
+ */
+export const getProgrammeDeletionImpact = (
+  dataset: MappingDataset,
+  programmeId: string
+): ProgrammeDeletionImpact => {
+  const programme = (dataset.programmes || []).find(p => p.id === programmeId);
+  if (!programme) {
+    return {
+      programmeExists: false,
+      programmeName: '',
+      hasDependencies: false,
+      associatedModulesCount: 0,
+      summaryMessage: 'Programme does not exist.'
+    };
+  }
+
+  const moduleCount = programme.moduleIds ? programme.moduleIds.length : 0;
+  const hasDependencies = moduleCount > 0;
+  const summaryMessage = hasDependencies
+    ? `Programme '${programme.name}' includes ${moduleCount} associated module(s). Deleting it removes the diet structure; all modules and mappings will remain intact.`
+    : `Programme '${programme.name}' has no associated modules and is safe to delete.`;
+
+  return {
+    programmeExists: true,
+    programmeName: programme.name,
+    hasDependencies,
+    associatedModulesCount: moduleCount,
     summaryMessage
   };
 };
